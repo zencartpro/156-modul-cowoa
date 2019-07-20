@@ -5,8 +5,8 @@
  * @package page
  * @copyright Copyright 2003-2019 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart-pro.at/license/2_0.txt GNU Public License V2.0
- * @version $Id: header_php.php for COWOA 2019-07-03 09:29:16Z webchills $
+ * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
+ * @version $Id: header_php.php for COWOA 2019-07-20 16:29:16Z webchills $
  */
 
 // This should be first line of the script:
@@ -26,12 +26,12 @@ if (isset($_GET['action']) && ($_GET['action'] == 'process')) {
     exit(0);
   }
   // BEGIN SLAM PREVENTION
-  if ($_POST['email_address'] != '')
+  if (!empty($_POST['email_address']))
   {
     if (! isset($_SESSION['login_attempt'])) $_SESSION['login_attempt'] = 0;
     $_SESSION['login_attempt'] ++;
   } // END SLAM PREVENTION
-  $email_address = zen_db_prepare_input($_POST['email_address']);
+  $email_address = zen_db_prepare_input(trim($_POST['email_address']));
 
   $check_customer_query = "SELECT customers_firstname, customers_lastname, customers_password, customers_id 
                            FROM " . TABLE_CUSTOMERS . "

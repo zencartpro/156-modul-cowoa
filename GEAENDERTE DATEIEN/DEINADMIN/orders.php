@@ -4,8 +4,8 @@
  * @package admin
  * @copyright Copyright 2003-2019 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart-pro.at/license/2_0.txt GNU Public License V2.0
- * @version $Id: orders.php for COWOA 2019-07-03 09:31:51Z webchills $
+ * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
+ * @version $Id: orders.php for COWOA 2019-07-20 16:16:51Z webchills $
  */
 require('includes/application_top.php');
 
@@ -843,8 +843,8 @@ if (zen_not_null($action) && $order_exists == true) {
                   <td class="dataTableHeadingContent text-center"><?php echo TABLE_HEADING_DATE_PURCHASED; ?></td>
                   <td class="dataTableHeadingContent text-right"><?php echo TABLE_HEADING_STATUS; ?></td>
                   <td class="dataTableHeadingContent text-center"><?php echo TABLE_HEADING_CUSTOMER_COMMENTS; ?></td>
-		              <td class="dataTableHeadingContent text-center">Device</td>
-		              <td class="dataTableHeadingContent text-center">COWOA</td>
+		  <td class="dataTableHeadingContent text-center">Device</td>
+		  <td class="dataTableHeadingContent text-center">COWOA</td>
 <?php
   // -----
   // A watching observer can provide an associative array in the form:

@@ -6,8 +6,8 @@
  * @package admin
  * @copyright Copyright 2003-2019 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart-pro.at/license/2_0.txt GNU Public License V2.0
- * @version $Id: orders_status_updates_admin.php for COWOA 2019-07-13 16:22:14Z webchills $
+ * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
+ * @version $Id: orders_status_updates_admin.php for COWOA 2019-07-20 16:22:14Z webchills $
  */
 define('OSH_EMAIL_SEPARATOR', '------------------------------------------------------');
 define('OSH_EMAIL_TEXT_SUBJECT', 'Bestellstatus aktualisiert');

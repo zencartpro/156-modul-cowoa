@@ -6,8 +6,8 @@
  * @package page
  * @copyright Copyright 2003-2019 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart-pro.at/license/2_0.txt GNU Public License V2.0
- * @version $Id: header_php.php for COWOA 2019-07-03 09:20:05Z webchills $
+ * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
+ * @version $Id: header_php.php for COWOA 2019-07-20 16:20:05Z webchills $
  */
 // This should be first line of the script:
   $zco_notifier->notify('NOTIFY_HEADER_START_CHECKOUT_SHIPPING');
