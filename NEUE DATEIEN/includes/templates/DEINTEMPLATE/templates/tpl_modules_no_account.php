@@ -6,7 +6,7 @@
  * @copyright Copyright 2003-2019 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
- * @version $Id: tpl_modules_no_account.php 2019-07-04 06:49:16Z webchills $
+ * @version $Id: tpl_modules_no_account.php 2019-12-22 10:49:16Z webchills $
  */
 ?>
 
@@ -26,21 +26,8 @@
 <?php
   }
 ?>
-<!-- COWOA - Check Cart to see if money is owed or free products -->
-<?php
- if ($_SESSION['cart']->show_total() == 0 and COWOA_EMAIL_ONLY == 'true') {
-?>    
-<!-- COWOA - Cart Totals are Zero, so just ask for e-mail address-->
-<fieldset>
-<legend><?php echo TABLE_HEADING_CONTACT_DETAILS; ?></legend>
-<label class="inputLabel" for="email-address"><?php echo ENTRY_EMAIL_ADDRESS; ?></label>
-<?php echo zen_draw_input_field('email_address', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_email_address', '40') . ' id="email-address"') . (zen_not_null(ENTRY_EMAIL_ADDRESS_TEXT) ? '<span class="alert">' . ENTRY_EMAIL_ADDRESS_TEXT . '' . EMAIL_TEXT_COWOA . '</span>':''); ?>
-<br class="clearBoth" />
-</fieldset>
-<input type="hidden" name="email_format" value="TEXT" checked="checked" id="email-format-text" />
-<?php
-} else {
 
+<?php
   if (ACCOUNT_COMPANY == 'true') {
 ?>
 <fieldset>
@@ -167,6 +154,4 @@
 </fieldset>
 <?php } ?>
 
-<?php
-}
-?>
+
