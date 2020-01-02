@@ -6,7 +6,7 @@
  * @copyright Copyright 2003-2019 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
- * @version $Id: functions_osh_update.php for COWOA 2019-10-05 10:34:42Z webchills $
+ * @version $Id: functions_osh_update.php for COWOA 2020-01-02 09:47:42Z webchills $
  */
 if (!defined('IS_ADMIN_FLAG')) {
     exit('Invalid Access');
@@ -152,7 +152,7 @@ function zen_update_orders_history($orders_id, $message = '', $updated_by = null
                 $osh_info->fields['customers_name']. "\n\n" .
                 OSH_EMAIL_TEXT_UPDATEINFO . STORE_NAME . "\n\n" .
                 OSH_EMAIL_TEXT_ORDER_NUMBER . ' ' . $orders_id . "\n\n" .                
-                OSH_EMAIL_TEXT_COWOA_URL . ' ' . zen_catalog_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, "order_id=$orders_id", 'SSL') . "\n\n" .
+                OSH_EMAIL_TEXT_COWOA_URL . ' ' . zen_catalog_href_link(FILENAME_ORDER_STATUS, "order_id=$orders_id", 'SSL') . "\n\n" .
                 OSH_EMAIL_TEXT_DATE_ORDERED . ' ' . zen_date_long($osh_info->fields['date_purchased']) . "\n\n" .
                 strip_tags($email_message) .
                 $status_text . $status_value_text .

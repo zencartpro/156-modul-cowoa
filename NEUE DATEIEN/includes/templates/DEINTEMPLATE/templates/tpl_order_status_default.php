@@ -3,10 +3,10 @@
  * Page Template
  *
  * @package templateSystem
- * @copyright Copyright 2003-2019 Zen Cart Development Team
+ * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
- * @version $Id: tpl_orders_status_default.php 2019-07-04 08:49:16Z webchills $
+ * @version $Id: tpl_orders_status_default.php 2020-01-02 10:11:16Z webchills $
  */
 ?>
 <div class="centerColumn" id="accountHistInfo">
@@ -158,18 +158,10 @@ echo zen_draw_form('order_status', zen_href_link(FILENAME_ORDER_STATUS, '', 'SSL
 <div class="buttonRow forward"><?php echo zen_image_submit(BUTTON_IMAGE_CONTINUE, BUTTON_CONTINUE_ALT); ?></div>
 </fieldset>
 </form>
-<!--bof logoff-->
 <!--Kills session after COWOA customer looks at order status-->
 <?php
-if (zen_in_guest_checkout()) {
+if ($_SESSION['COWOA']) {
   zen_session_destroy();
-} else {
-  if (isset($_SESSION['customer_guest_id'])) {
-    echo TEXT_CHECKOUT_LOGOFF_GUEST;
-  } elseif (isset($_SESSION['customer_id'])) {
-    echo TEXT_CHECKOUT_LOGOFF_CUSTOMER;
-  }
+} 
 ?>
-<?php } ?>
-<!--eof logoff-->
 </div>
