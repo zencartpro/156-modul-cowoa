@@ -4,9 +4,9 @@
  * File contains the order-processing class ("order")
  *
  * @package classes
- * @copyright Copyright 2003-2019 Zen Cart Development Team
+ * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
- * @version $Id: order.php for COWOA 2019-11-02 16:58:03Z webchills $
+ * @version $Id: order.php for COWOA 2020-01-05 11:22:03Z webchills $
  */
 /**
  * order class
@@ -1059,6 +1059,8 @@ class order extends base {
     $html_msg['INTRO_DATE_ORDERED']    = strftime(DATE_FORMAT_LONG);
     $html_msg['INTRO_URL_TEXT']        = EMAIL_TEXT_INVOICE_URL_CLICK;
     $html_msg['INTRO_URL_VALUE']       = zen_href_link(FILENAME_ORDER_STATUS, 'order_id=' . $zf_insert_id, 'SSL', false);
+    $html_msg['EMAIL_TEXT_TELEPHONE']  = EMAIL_TEXT_TELEPHONE;
+	  $html_msg['EMAIL_CUSTOMER_PHONE']  = $this->customer['telephone'];	
     }
     
     // COWOA:If COWOA but Send Order Status is False
@@ -1090,6 +1092,8 @@ class order extends base {
     $html_msg['INTRO_DATE_ORDERED']    = strftime(DATE_FORMAT_LONG);
     $html_msg['INTRO_URL_TEXT']        = '';
     $html_msg['INTRO_URL_VALUE']       = '';
+    $html_msg['EMAIL_TEXT_TELEPHONE']  = EMAIL_TEXT_TELEPHONE;
+	  $html_msg['EMAIL_CUSTOMER_PHONE']  = $this->customer['telephone'];	  
     }
     
      // NO COWOA, so lets set up the Text and HTML E-mail Information for the Order History Info
