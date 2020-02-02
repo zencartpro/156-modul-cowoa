@@ -6,10 +6,10 @@
  * Displays confirmation details after order has been successfully processed.
  *
  * @package templateSystem
- * @copyright Copyright 2003-2019 Zen Cart Development Team
+ * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
- * @version $Id: tpl_checkout_success_default.php for COWOA 2019-11-03 19:38:39Z webchills $
+ * @version $Id: tpl_checkout_success_default.php for COWOA 2020-02-02 14:38:39Z webchills $
  */
 ?>
 <div class="centerColumn" id="checkoutSuccess">
@@ -64,11 +64,11 @@ if ($_SESSION['COWOA'] and COWOA_LOGOFF == 'true') {
 
 </div>
 <div class="buttonRow forward">
-    <a href="<?php echo zen_href_link(FILENAME_CONTACT_US, '', 'SSL'); ?>" name="linkContactUs"><?php echo zen_image_button(BUTTON_IMAGE_CONTACT_US , BUTTON_CONTACT_US_TEXT); ?></a>
+    <a href="<?php echo zen_href_link(FILENAME_CONTACT_US, '', 'SSL'); ?>" id="linkContactUs"><?php echo zen_image_button(BUTTON_IMAGE_CONTACT_US , BUTTON_CONTACT_US_TEXT); ?></a>
     <?php if(!($_SESSION['COWOA'])) { ?>
-    <a href="<?php echo zen_href_link(FILENAME_ACCOUNT, '', 'SSL'); ?>" name="linkMyAccount"><?php echo zen_image_button(BUTTON_IMAGE_MY_ORDERS , BUTTON_MY_ORDERS_TEXT); ?></a>
+    <a href="<?php echo zen_href_link(FILENAME_ACCOUNT, '', 'SSL'); ?>" id="linkMyAccount"><?php echo zen_image_button(BUTTON_IMAGE_MY_ORDERS , BUTTON_MY_ORDERS_TEXT); ?></a>
     <?php } ?>
-    <a href="<?php echo zen_href_link(FILENAME_LOGOFF, '', 'SSL'); ?>" name="linkLogoff"><?php echo zen_image_button(BUTTON_IMAGE_LOG_OFF , BUTTON_LOG_OFF_ALT); ?></a>
+    <a href="<?php echo zen_href_link(FILENAME_LOGOFF, '', 'SSL'); ?>" id="linkLogoff"><?php echo zen_image_button(BUTTON_IMAGE_LOG_OFF , BUTTON_LOG_OFF_ALT); ?></a>
 <?php } ?>
 </div>
 
@@ -101,7 +101,7 @@ require($template->get_template_dir('tpl_account_history_info_default.php',DIR_W
 <br />
 <?php } ?>
 <div class="buttonRow forward"><?php echo zen_image_submit(BUTTON_IMAGE_UPDATE, BUTTON_UPDATE_ALT); ?></div>
-</form>
+<?php echo '</form>'; ?>
 </fieldset>
 <?php
     }
