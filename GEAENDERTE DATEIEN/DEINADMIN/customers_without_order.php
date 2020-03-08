@@ -4,7 +4,7 @@
  * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
- * @version $Id: customers_without_order.php for COWOA 2020-02-02 14:35:51Z webchills $
+ * @version $Id: customers_without_order.php for COWOA 2020-03-08 12:35:51Z webchills $
  */
 require('includes/application_top.php');
 
@@ -1198,17 +1198,25 @@ if (zen_not_null($action)) {
                   $search = 'where o.date_purchased IS NULL';
                   if (isset($_GET['search']) && zen_not_null($_GET['search'])) {
                     $keywords = zen_db_input(zen_db_prepare_input($_GET['search']));
-                    $search = "where (o.date_purchased IS NULL) and (c.customers_lastname like '%" . $keywords . "%'
-                         or c.customers_firstname like '%" . $keywords . "%'
-                         or c.customers_email_address like '%" . $keywords . "%'
+                    $parts = explode(" ", trim($keywords));
+                    $search = 'where (o.date_purchased IS NULL) and ';
+                    foreach ($parts as $k => $v) {
+                      $sql_add = " (c.customers_lastname like '%:part%'
+                         or c.customers_firstname like '%:part%'
+                         or c.customers_email_address like '%:part%'
                          or c.customers_telephone rlike ':keywords:'
                          or a.entry_company rlike ':keywords:'
                          or a.entry_street_address rlike ':keywords:'
                          or a.entry_city rlike ':keywords:'
                          or a.entry_postcode rlike ':keywords:')";
-                    $search = $db->bindVars($search, ':keywords:', $keywords, 'regexp');
-                  }          
-                  
+                      if ($k != 0) {
+                        $sql_add = ' and ' . $sql_add;
+                      }
+                      $sql_add = $db->bindVars($sql_add, ':part', $v, 'noquotestring');
+                      $sql_add = $db->bindVars($sql_add, ':keywords:', $v, 'regexp');
+                      $search .= $sql_add;
+                    }
+                  }
                   $new_fields = '';
 
                   $zco_notifier->notify('NOTIFY_ADMIN_CUSTOMERS_LISTING_NEW_FIELDS', array(), $new_fields, $disp_order);
@@ -1344,7 +1352,7 @@ if (zen_not_null($action)) {
                   <td class="dataTableContent text-right"><?php echo $currencies->format($customer['amount']); ?></td>
                 <?php } ?>
                 <td class="dataTableContent text-center">
-                      echo zen_draw_form('setstatus_' . (int)$customer['customers_id'], FILENAME_CUSTOMERS_WITHOUT_ORDER, 'action=status&cID=' . $customer['customers_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . (isset($_GET['search']) ? '&search=' . $_GET['search'] : ''));
+                     <?php echo zen_draw_form('setstatus_' . (int)$customer['customers_id'], FILENAME_CUSTOMERS_WITHOUT_ORDER, 'action=status&cID=' . $customer['customers_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . (isset($_GET['search']) ? '&search=' . $_GET['search'] : ''));
                       ?>
                       <?php if ($customer['customers_authorization'] == 0) { ?>
                       <input type="image" src="<?php echo DIR_WS_IMAGES ?>icon_green_on.gif" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" />
@@ -1408,7 +1416,7 @@ if (zen_not_null($action)) {
 
                     $heading[] = array('text' => '<h4>' . TABLE_HEADING_ID . $cInfo->customers_id . ' ' . $cInfo->customers_firstname . ' ' . $cInfo->customers_lastname . '</h4>' . '<br>' . $cInfo->customers_email_address);
 
-                    $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_CUSTOMERS_WITHOUT_ORDER, zen_get_all_get_params(array('cID', 'action', 'search')) . 'cID=' . $cInfo->customers_id . '&action=edit', 'NONSSL') . '" class="btn btn-primary" role="button">' . IMAGE_EDIT . '</a> <a href="' . zen_href_link(FILENAME_CUSTOMERS, zen_get_all_get_params(array('cID', 'action', 'search')) . 'cID=' . $cInfo->customers_id . '&action=confirm', 'NONSSL') . '" class="btn btn-warning" role="button">' . IMAGE_DELETE . '</a>');
+                    $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_CUSTOMERS_WITHOUT_ORDER, zen_get_all_get_params(array('cID', 'action', 'search')) . 'cID=' . $cInfo->customers_id . '&action=edit', 'NONSSL') . '" class="btn btn-primary" role="button">' . IMAGE_EDIT . '</a> <a href="' . zen_href_link(FILENAME_CUSTOMERS_WITHOUT_ORDER, zen_get_all_get_params(array('cID', 'action', 'search')) . 'cID=' . $cInfo->customers_id . '&action=confirm', 'NONSSL') . '" class="btn btn-warning" role="button">' . IMAGE_DELETE . '</a>');
                     $contents[] = array('align' => 'text-center', 'text' => ($customers_orders->RecordCount() != 0 ? '<a href="' . zen_href_link(FILENAME_ORDERS, 'cID=' . $cInfo->customers_id, 'NONSSL') . '" class="btn btn-default" role="button">' . IMAGE_ORDERS . '</a>' : '') . ' <a href="' . zen_href_link(FILENAME_MAIL, 'origin=customers.php&mode=NONSSL&customer=' . $cInfo->customers_email_address . '&cID=' . $cInfo->customers_id, 'NONSSL') . '" class="btn btn-default" role="button">' . IMAGE_EMAIL . '</a>');
                     if ($cInfo->COWOA_account){
                     // do not show pwd reset button
