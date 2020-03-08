@@ -1358,6 +1358,9 @@ if (zen_not_null($action)) {
                     <?php echo zen_draw_hidden_field('current', $customer['customers_authorization']); ?>
                     <?php echo '</form>'; ?>
                 </td>
+                <!-- COWOA+ additional field in table -->
+                <td class="dataTableContent text-center"><?php if ($customers->fields['COWOA_account'] == 1) echo '<b>X</b>'; ?></td>
+                <!-- COWOA+ -->
                 <td class="dataTableContent text-right"><?php
                     if (isset($cInfo) && is_object($cInfo) && ($customer['customers_id'] == $cInfo->customers_id)) {
                       echo zen_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', '');
