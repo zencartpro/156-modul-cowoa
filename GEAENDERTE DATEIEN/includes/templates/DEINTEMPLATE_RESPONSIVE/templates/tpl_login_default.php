@@ -3,10 +3,10 @@
  * Page Template
  * Zen Cart German Specific
  * @package templateSystem
- * @copyright Copyright 2003-2019 Zen Cart Development Team
+ * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
- * @version $Id: tpl_login_default.php for COWOA 2019-07-20 16:48:16Z webchills $
+ * @version $Id: tpl_login_default.php for COWOA 2020-07-19 14:48:16Z webchills $
  */
 ?>
 <div class="centerColumn" id="loginDefault">

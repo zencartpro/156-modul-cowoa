@@ -9,7 +9,7 @@
  * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
- * @version $Id: tpl_checkout_payment_default.php for COWOA 2020-07-15 16:59:42Z webchills $
+ * @version $Id: tpl_checkout_payment_default.php for COWOA 2020-07-19 09:59:42Z webchills $
  */
 ?>
 <?php echo $payment_modules->javascript_validation(); ?>
