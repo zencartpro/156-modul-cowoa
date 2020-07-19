@@ -6,7 +6,7 @@
  * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
- * @version $Id: header_php.php for COWOA 2020-02-02 14:32:10Z webchills $
+ * @version $Id: header_php.php for COWOA 2020-07-15 20:32:10Z webchills $
  */
 $zco_notifier->notify('NOTIFY_HEADER_START_GV_REDEEM');
 

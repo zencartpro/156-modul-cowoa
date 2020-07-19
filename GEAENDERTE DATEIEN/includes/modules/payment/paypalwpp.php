@@ -6,7 +6,7 @@
  * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license https://www.zen-cart-pro.at/license/3_0.txt GNU General Public License V3.0
- * @version $Id: paypalwpp.php for COWOA 2020-03-08 12:36:14Z webchills $
+ * @version $Id: paypalwpp.php for COWOA 2020-07-15 20:36:14Z webchills $
  */
 /**
  * load the communications layer code
@@ -907,9 +907,16 @@ if (false) { // disabled until clarification is received about coupons in PayPal
       if (!$error) {
         if (!isset($response['GROSSREFUNDAMT'])) $response['GROSSREFUNDAMT'] = $refundAmt;
         // Success, so save the results
-        $comments = 'REFUND INITIATED. Trans ID:' . $response['REFUNDTRANSACTIONID'] . $response['PNREF']. "\n" . ' Gross Refund Amt: ' . urldecode($response['GROSSREFUNDAMT']) . (isset($response['PPREF']) ? "\nPPRef: " . $response['PPREF'] : '') . "\n" . $refundNote;
-        zen_update_orders_history($oID, $comments, null, $new_order_status, 0);
-
+        $sql_data_array = array('orders_id' => $oID,
+                                'orders_status_id' => (int)$new_order_status,
+                                'date_added' => 'now()',
+                                'comments' => 'REFUND INITIATED. Trans ID:' . $response['REFUNDTRANSACTIONID'] . $response['PNREF']. "\n" . /*' Net Refund Amt:' . urldecode($response['NETREFUNDAMT']) . "\n" . ' Fee Refund Amt: ' . urldecode($response['FEEREFUNDAMT']) . "\n" . */' Gross Refund Amt: ' . urldecode($response['GROSSREFUNDAMT']) . (isset($response['PPREF']) ? "\nPPRef: " . $response['PPREF'] : '') . "\n" . $refundNote,
+                                'customer_notified' => 0
+                             );
+        zen_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+        $db->Execute("update " . TABLE_ORDERS  . "
+                      set orders_status = '" . (int)$new_order_status . "'
+                      where orders_id = '" . (int)$oID . "'");
         $messageStack->add_session(sprintf(MODULE_PAYMENT_PAYPALWPP_TEXT_REFUND_INITIATED, urldecode($response['GROSSREFUNDAMT']), urldecode($response['REFUNDTRANSACTIONID']). $response['PNREF']), 'success');
         return true;
       }
@@ -957,9 +964,16 @@ if (false) { // disabled until clarification is received about coupons in PayPal
       $new_order_status = ($new_order_status > 0 ? $new_order_status : 1);
       if (!$error) {
         // Success, so save the results
-        $comments = 'AUTHORIZATION ADDED. Trans ID: ' . urldecode($response['TRANSACTIONID']) . "\n" . ' Amount:' . urldecode($response['AMT']) . ' ' . $currency;
-        zen_update_orders_history($oID, $comments, null, $new_order_status, -1);
-
+        $sql_data_array = array('orders_id' => (int)$oID,
+                                'orders_status_id' => (int)$new_order_status,
+                                'date_added' => 'now()',
+                                'comments' => 'AUTHORIZATION ADDED. Trans ID: ' . urldecode($response['TRANSACTIONID']) . "\n" . ' Amount:' . urldecode($response['AMT']) . ' ' . $currency,
+                                'customer_notified' => -1
+                               );
+        zen_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+        $db->Execute("update " . TABLE_ORDERS  . "
+                      set orders_status = '" . (int)$new_order_status . "'
+                      where orders_id = '" . (int)$oID . "'");
         $messageStack->add_session(sprintf(MODULE_PAYMENT_PAYPALWPP_TEXT_AUTH_INITIATED, urldecode($response['AMT'])), 'success');
         return true;
       }
@@ -1019,9 +1033,16 @@ if (false) { // disabled until clarification is received about coupons in PayPal
           if (!isset($response['ORDERTIME'])) $response['ORDERTIME'] = date("M-d-Y h:i:s");
         }
         // Success, so save the results
-        $comments = 'FUNDS CAPTURED. Trans ID: ' . urldecode($response['TRANSACTIONID']) . $response['PNREF']. "\n" . ' Amount: ' . urldecode($response['AMT']) . ' ' . $currency . "\n" . 'Time: ' . urldecode($response['ORDERTIME']) . "\n" . 'Auth Code: ' . (!empty($response['AUTHCODE']) ? $response['AUTHCODE'] : $response['CORRELATIONID']) . (isset($response['PPREF']) ? "\nPPRef: " . $response['PPREF'] : '') . "\n" . $captureNote;
-        zen_update_orders_history($oID, $comments, null, $new_order_status, 0);
-
+        $sql_data_array = array('orders_id' => (int)$oID,
+                                'orders_status_id' => (int)$new_order_status,
+                                'date_added' => 'now()',
+                                'comments' => 'FUNDS CAPTURED. Trans ID: ' . urldecode($response['TRANSACTIONID']) . $response['PNREF']. "\n" . ' Amount: ' . urldecode($response['AMT']) . ' ' . $currency . "\n" . 'Time: ' . urldecode($response['ORDERTIME']) . "\n" . 'Auth Code: ' . (!empty($response['AUTHCODE']) ? $response['AUTHCODE'] : $response['CORRELATIONID']) . (isset($response['PPREF']) ? "\nPPRef: " . $response['PPREF'] : '') . "\n" . $captureNote,
+                                'customer_notified' => 0
+                             );
+        zen_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+        $db->Execute("update " . TABLE_ORDERS  . "
+                      set orders_status = '" . (int)$new_order_status . "'
+                      where orders_id = '" . (int)$oID . "'");
         $messageStack->add_session(sprintf(MODULE_PAYMENT_PAYPALWPP_TEXT_CAPT_INITIATED, urldecode($response['AMT']), urldecode(!empty($response['AUTHCODE']) ? $response['AUTHCODE'] : $response['CORRELATIONID']). $response['PNREF']), 'success');
         return true;
       }
@@ -1063,9 +1084,16 @@ if (false) { // disabled until clarification is received about coupons in PayPal
       $new_order_status = ($new_order_status > 0 ? $new_order_status : 1);
       if (!$error) {
         // Success, so save the results
-        $comments = 'VOIDED. Trans ID: ' . urldecode($response['AUTHORIZATIONID']). $response['PNREF'] . (isset($response['PPREF']) ? "\nPPRef: " . $response['PPREF'] : '') . "\n" . $voidNote;
-        zen_update_orders_history($oID, $comments, null, $new_order_status, 0);
-
+        $sql_data_array = array('orders_id' => (int)$oID,
+                                'orders_status_id' => (int)$new_order_status,
+                                'date_added' => 'now()',
+                                'comments' => 'VOIDED. Trans ID: ' . urldecode($response['AUTHORIZATIONID']). $response['PNREF'] . (isset($response['PPREF']) ? "\nPPRef: " . $response['PPREF'] : '') . "\n" . $voidNote,
+                                'customer_notified' => 0
+                             );
+        zen_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+        $db->Execute("update " . TABLE_ORDERS  . "
+                      set orders_status = '" . (int)$new_order_status . "'
+                      where orders_id = '" . (int)$oID . "'");
         $messageStack->add_session(sprintf(MODULE_PAYMENT_PAYPALWPP_TEXT_VOID_INITIATED, urldecode($response['AUTHORIZATIONID']) . $response['PNREF']), 'success');
         return true;
       }
@@ -2198,7 +2226,14 @@ if (false) { // disabled until clarification is received about coupons in PayPal
         // send Welcome Email if appropriate
         if ($this->new_acct_notify == 'Yes') {
           // require the language file
-          require(zen_get_file_directory(DIR_FS_CATALOG . DIR_WS_LANGUAGES . $_SESSION['language'] . "/", 'create_account.php', 'false'));
+          global $language_page_directory, $template_dir;
+          if (!isset($language_page_directory)) $language_page_directory = DIR_WS_LANGUAGES . $_SESSION['language'] . '/';
+          if (file_exists($language_page_directory . $template_dir . '/create_account.php')) {
+            $template_dir_select = $template_dir . '/';
+          } else {
+            $template_dir_select = '';
+          }
+          require($language_page_directory . $template_dir_select . '/create_account.php');
           // set the mail text
           $email_text = sprintf(EMAIL_GREET_NONE, $paypal_ec_payer_info['payer_firstname']) ;
           $email_text .= "\n" . EMAIL_EC_ACCOUNT_INFORMATION . "\n\nEmail: " . $paypal_ec_payer_info['payer_email'] . "\nPassword: " . $password . "\n\n";
@@ -2465,7 +2500,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
       }
     }
     // debug
-    $this->zcLog('findMatchingAddressBookEntry - 1-stats', 'lookups:' . "\n" . print_r(array_merge($country->fields, array('zone_country_id' => $country_zone_check->fields), $logMsg), true) . "\n" . 'check_zone: ' . $check_zone . "\n" . 'zone:' . $zone_id . "\nSubmittedAddress:".print_r($address_question_arr, TRUE));
+    $this->zcLog('findMatchingAddressBookEntry - 1-stats', 'lookups:' . "\n" . print_r(array_merge($country->fields, array('zone_country_id' => $country_zone_check->fields['zone_id']), $logMsg), true) . "\n" . 'check_zone: ' . $check_zone . "\n" . 'zone:' . $zone_id . "\nSubmittedAddress:".print_r($address_question_arr, TRUE));
 
     // do a match on address, street, street2, city
     $sql = "SELECT address_book_id, entry_street_address, entry_suburb, entry_city, entry_company, entry_firstname, entry_lastname
